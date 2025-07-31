@@ -82,4 +82,4 @@ Agradecemos a todos os pesquisadores de segurança que contribuíram para tornar
 
 ---
 
-**Última atualização**: Janeiro 2025 
+**Última atualização**: Agosto 2025 
