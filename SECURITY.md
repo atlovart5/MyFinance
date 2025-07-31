@@ -2,7 +2,7 @@
 
 ## 🚨 Reportando Vulnerabilidades
 
-Se você descobriu uma vulnerabilidade de segurança no FinBot, por favor **NÃO** abra um issue público. Em vez disso, envie um email para [security@finbot-project.com](mailto:arthursprovenzano29@gmail.com).
+Se você descobriu uma vulnerabilidade de segurança no FinBot, por favor **NÃO** abra um issue público. Em vez disso, envie um email para (mailto:arthursprovenzano29@gmail.com).
 
 ### **O que incluir no relatório:**
 
