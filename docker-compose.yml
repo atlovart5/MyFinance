@@ -1,0 +1,62 @@
+# FinBot - Docker Compose Configuration
+version: '3.8'
+
+services:
+  finbot:
+    build: .
+    container_name: finbot-app
+    ports:
+      - "8501:8501"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4.1-nano}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.0}
+      - MAX_TOKENS=${MAX_TOKENS:-4000}
+      - ALLOW_DANGEROUS_CODE=${ALLOW_DANGEROUS_CODE:-true}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./backup:/app/backup
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Serviço de backup (opcional)
+  backup:
+    image: alpine:latest
+    container_name: finbot-backup
+    volumes:
+      - ./data:/data
+      - ./backup:/backup
+    command: |
+      sh -c '
+      while true; do
+        tar -czf /backup/finbot-backup-$$(date +%Y%m%d-%H%M%S).tar.gz /data
+        sleep 86400
+      done
+      '
+    restart: unless-stopped
+
+  # Serviço de monitoramento (opcional)
+  monitoring:
+    image: grafana/grafana:latest
+    container_name: finbot-monitoring
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:
+
+networks:
+  default:
+    name: finbot-network 
